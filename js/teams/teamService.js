@@ -38,8 +38,13 @@ app.factory('teamService', function($http, $q){
 		var url = 'https://api.parse.com/1/classes/' + team + '?order=-createdAt';
 
 		$http.get(url)
-			.then(function (response) {
-				var results = response.data.results;
+			.success(function (response) {
+				var results = response.results;
+
+				// no data found -- reject the promise
+				if (response.results.length < 1)
+					return deferred.reject('no data found');
+
 				var wins = 0;
 				var losses = 0;
 
@@ -51,8 +56,10 @@ app.factory('teamService', function($http, $q){
 				results.losses = losses;
 
 				deferred.resolve(results);
-			}, function (err) {
-				console.error(err);
+			})
+			.error(function (err) {
+				console.log(err);
+				deferred.reject(err);
 			})
 
 		return deferred.promise;

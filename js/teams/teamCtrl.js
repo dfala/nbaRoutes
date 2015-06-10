@@ -27,10 +27,8 @@ app.controller('teamCtrl', function($scope, $routeParams, teamService, teamData)
 
 		teamService.addNewGame($scope.newGame)
 			.then(function (response) {
-				console.log(response, 'data data data data!!!');
 				teamService.getTeamData($scope.newGame.homeTeam)
 					.then(function (data) {
-						// console.log(data, 'data data data data!!!');
 						$scope.teamData = data;
 
 						$scope.newGame = '';
